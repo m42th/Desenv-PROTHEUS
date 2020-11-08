@@ -2,46 +2,39 @@
 #include 'totvs.ch'
 
 /*========================================================================
-|Programa:  Programa escrito com a finalidade de procurar por um parâmetro
-e poder alterar o valor do mesmo sem precisar logar no CFG.              |
+|Programa:| Programa escrito com a finalidade de procurar por um parâmetro
+e poder alterar o valor do mesmo sem precisar logar no CFG.              
 --------------------------------------------------------------------------
-|Data:    | 04/11/2020
+|Data:    | 08/11/2020
 --------------------------------------------------------------------------
 |Autor:   | Matheus Santos de Oliveira / (61) 99812-9318
 ==========================================================================*/
 
 User Function ALTMV()
 
-    //Construção e funções da tela
     Local oDlg
-    Local oTsay1
-    Local oTsay2
-    Local oButt1 
-    Local oButt2
-
-    //Variáveis para manipulação dos dados
-    Local oGet1
-    Local oGet2
-    Local cParGet1 := space(10)
-    Local cParGet2 := space(10)
-    Local cParVlr1
-    Local cParVlr2
-   
-
-    //CRIAÇÃO DA TELA PRINCIPAL   
-    oDlg := MSDialog():New(0,0,160,200,'Alterar Parâmetros',,,,,CLR_WHITE,CLR_BLACK,,oDlg,.T.,,,,.T.)
-
-    //GET PARA RECEPÇÃO DO PARÂMETRO
-    oGet1 := TGet():New(10,05, {|u|"DIGITE O PARÂMETRO" + If(PCount()>0,cParGet1:=u,cParGet1)},oDlg,60,10,'',,CLR_BLACK,CLR_WHITE,,,,.T.,"",,,.F.,.F.,,.F.,.F.,"","",,)
-    oGet2 := TGet():New(40,05, {|u|"DIGITE O NOVO VALOR" + If(PCount()>0,cParGet2:=u,cParGet2)},oDlg,60,10,'',,CLR_BLACK,CLR_WHITE,,,,.T.,"",,,.F.,.F.,,.F.,.F.,"","",,)
+    Local oGet, oGet2
+    Local oBtt, oBtt2
+    Local oSay, oSay2, oSay3 
+    Local cGetVlr := space(10)
+    Local cValPar
+    Local cGetVlr2 := space(10)
     
-    //BOTÕES DE INTERAÇÃO
-    oButt1 := TButton():New(13,65,"Procurar",oDlg,{||cParVlr1 := GetMV(cParGet1) },30,09,,,.F.,.T.,.F.,,.F.,,,.F.)
-    oButt2 := TButton():New(43,65,"Alterar",oDlg, {||cParVlr2 := PutMV(cParGet1,cParGet2) },30,09,,,.F.,.T.,.F.,,.F.,,,.F.)
+    //Criação da tela
+    oDlg := MSDialog():New(000,000,200,200,"Alterar Parâmetros",,,,,CLR_BLACK,CLR_WHITE,,oDlg,.T.,,,,.T.)
     
-    //VISUALIZAÇÃO DO CONTEÚDO DO PARÂMETRO
-    oTsay1 := TSay():New(25,05,{||"Valor atual: [ " + cValToChar(cParVlr1) + " ]"},oDlg,,,,,,.T.,CLR_BLACK,CLR_WHITE,200,20)
-    oTsay2 := TSay():New(55,05,{||"Valor Alterado: [ " + cValToChar(GetMV(cParGet1)) + " ]"},oDlg,,,,,,.T.,CLR_BLACK,CLR_WHITE,200,20)
-    oDlg:Activate()
+    //Criação das funções que carregam um valor e visualiza o valor atual
+    oSay := TSay():New(11,05,{||"Pesquise o parâmetro"},oDlg,,oFont,,,,.T.,CLR_BLACK,CLR_WHITE,200,20)
+    oGet := TGet():New(20,05,{|u| if(Pcount()>0,cGetVlr := u, cGetVlr)},oDlg,,,"@!",,CLR_BLACK,CLR_WHITE,,,,.T.,"",,,.F.,.F.,,.F.,.F.,"","cGetVlr",,)
+    oBtt := TButton():New(20,70,"Procurar",oDlg,{|| cValPar := GetMV(cGetVlr)},30,10,,,,.T.,,,,,,,)
+    oSay2 := TSay():New(33,06,{||"Valor atual: [ " + cValToChar(cValPar) + " ]"},oDlg,,oFont,,,,.T.,CLR_BLACK,CLR_WHITE,200,20)
+
+    //Criação das funções que recebem um valor e alteram o valor do parâmetro mostrando seu resultado 
+    oSay3 := TSay():New(55,05,{||"Digite o novo valor"},oDlg,,oFont,,,,.T.,CLR_BLACK,CLR_WHITE,200,20)
+    oGet2 := TGet():New(65,05,{|u| if( Pcount()>0,cGetVlr2 := u, cGetVlr2)},oDlg,,,"@!",,CLR_BLACK,CLR_WHITE,,,,.T.,"",,,.F.,.F.,,.F.,.F.,"","cGetVlr2",,)
+    oBtt2 := TButton():New(65,70,"Alterar",oDlg,{|| PutMV(cGetVlr,cGetVlr2)},30,10,,,,.T.,,,,,,,)
+    oDlg:CtrlRefresh()
+    
+    oDlg:Activate(,,,.T.)
 
 Return
